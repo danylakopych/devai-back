@@ -9,22 +9,18 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '@prisma/client';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('Users')
+@ApiBearerAuth()
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
   @ApiBody({ type: CreateUserDto })
-  /* async createUser(
-    @Body() userData: { email: string; name: string; role: Role }
-  ): Promise<User> {
-    return this.userService.createUser(userData);
-  } */
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.createUser(createUserDto);
   }
@@ -34,18 +30,17 @@ export class UserController {
     return this.userService.getAllUsers();
   }
 
-  @Get(':id')
+  @Get('id/:id')
   async getUserById(@Param('id') id: number): Promise<User | null> {
     return this.userService.getUserById(Number(id));
   }
 
+  @Get('email/:email')
+  async getUserByEmail(@Param('email') email: string): Promise<User | null> {
+    return this.userService.getUserByEmail(String(email));
+  }
+
   @Patch(':id')
-  /* async updateUser(
-    @Param('id') id: number,
-    @Body() userData: { email?: string; name?: string; role?: Role }
-  ): Promise<User> {
-    return this.userService.updateUser(Number(id), userData);
-  } */
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto

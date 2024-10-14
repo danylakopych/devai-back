@@ -12,9 +12,15 @@ export class UserService {
     });
   }
 
-  async getUserById(id: number): Promise<User | null> {
+  async getUserById(user_id: number): Promise<User | null> {
     return this.prisma.user.findUnique({
-      where: { id },
+      where: { user_id },
+    });
+  }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    return await this.prisma.user.findFirstOrThrow({
+      where: { email: email },
     });
   }
 
@@ -22,16 +28,19 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
-  async updateUser(id: number, data: Prisma.UserUpdateInput): Promise<User> {
+  async updateUser(
+    user_id: number,
+    data: Prisma.UserUpdateInput
+  ): Promise<User> {
     return this.prisma.user.update({
-      where: { id },
+      where: { user_id },
       data,
     });
   }
 
-  async deleteUser(id: number): Promise<User> {
+  async deleteUser(user_id: number): Promise<User> {
     return this.prisma.user.delete({
-      where: { id },
+      where: { user_id },
     });
   }
 }
