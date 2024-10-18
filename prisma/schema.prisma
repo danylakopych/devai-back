@@ -14,29 +14,7 @@ model User {
   password   String
   created_at DateTime  @default(now())
 
-  roles      UserRole[]
-  projects   UserProjectAccess[]
-  stages     UserStageAccess[]
-  gptQueries GptIntegration[]
-}
-
-model Role {
-  role_id   Int       @id @default(autoincrement())
-  role_name String    @unique
-
-  users     UserRole[]
-
-  UserProjectAccess UserProjectAccess[]
-}
-
-model UserRole {
-  user_id Int
-  role_id Int
-
-  user User @relation(fields: [user_id], references: [user_id])
-  role Role @relation(fields: [role_id], references: [role_id])
-
-  @@id([user_id, role_id])
+  projects   Project[]
 }
 
 model Project {
@@ -44,21 +22,10 @@ model Project {
   project_name String
   description  String?
   created_at   DateTime  @default(now())
+  user_id      Int
+  user         User      @relation(fields: [user_id], references: [user_id])
 
   stages       ProjectStage[]
-  users        UserProjectAccess[]
-}
-
-model UserProjectAccess {
-  user_id    Int
-  project_id Int
-  role_id    Int
-
-  user    User    @relation(fields: [user_id], references: [user_id])
-  project Project @relation(fields: [project_id], references: [project_id])
-  role    Role    @relation(fields: [role_id], references: [role_id])
-
-  @@id([user_id, project_id])
 }
 
 model ProjectStage {
@@ -69,19 +36,7 @@ model ProjectStage {
   project_id Int
 
   project    Project @relation(fields: [project_id], references: [project_id])
-  users      UserStageAccess[]
   gptQueries GptIntegration[]
-}
-
-model UserStageAccess {
-  user_id    Int
-  stage_id   Int
-  access_level String
-
-  user  User         @relation(fields: [user_id], references: [user_id])
-  stage ProjectStage @relation(fields: [stage_id], references: [stage_id])
-
-  @@id([user_id, stage_id])
 }
 
 model GptIntegration {
@@ -93,5 +48,4 @@ model GptIntegration {
   timestamp      DateTime  @default(now())
 
   stage ProjectStage @relation(fields: [stage_id], references: [stage_id])
-  user  User         @relation(fields: [user_id], references: [user_id])
 }
