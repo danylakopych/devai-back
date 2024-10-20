@@ -8,13 +8,26 @@ export class ProjectService {
   constructor(private prisma: PrismaService) {}
 
   async createProject(createProjectDto: CreateProjectDto): Promise<Project> {
-    const { user_id, ...projectData } = createProjectDto;
+    const { user_id, project_name, description } = createProjectDto;
+
+    if (!user_id) {
+      throw new Error('Missing required fields: user_id');
+    }
+    if (!project_name) {
+      throw new Error('Missing required fields: project_name');
+    }
+    if (!description) {
+      throw new Error('Missing required fields: description');
+    }
 
     return this.prisma.project.create({
       data: {
-        ...projectData,
+        project_name: project_name,
+        description: description,
         user: {
-          connect: { user_id: user_id },
+          connect: {
+            user_id: user_id,
+          },
         },
       },
     });

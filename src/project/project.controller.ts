@@ -26,7 +26,7 @@ export class ProjectController {
     return this.projectService.createProject(createProjectDto);
   }
 
-  @Get('id/:id')
+  @Get(':id')
   async getProjectById(@Param('id') id: number): Promise<Project | null> {
     return this.projectService.getProjectById(Number(id));
   }
