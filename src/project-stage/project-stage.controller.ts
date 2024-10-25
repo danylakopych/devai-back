@@ -53,4 +53,11 @@ export class ProjectStageController {
   async deleteProjectStage(@Param('id') id: number): Promise<ProjectStage> {
     return this.projectStageService.deleteProjectStage(Number(id));
   }
+
+  @Get('project/:id')
+  async getAllProjectsByUserId(
+    @Param('id') project_id: string
+  ): Promise<ProjectStage[]> {
+    return this.projectStageService.getProjectByUserId(Number(project_id));
+  }
 }

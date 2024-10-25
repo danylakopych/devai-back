@@ -47,4 +47,10 @@ export class ProjectStageService {
       where: { stage_id },
     });
   }
+
+  async getProjectByUserId(project_id: number): Promise<ProjectStage[]> {
+    return this.prisma.projectStage.findMany({
+      where: { project_id },
+    });
+  }
 }
