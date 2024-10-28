@@ -6,10 +6,21 @@ import { UserModule } from './user/user.module';
 import { ProjectModule } from './project/project.module';
 import { ProjectStageController } from './project-stage/project-stage.controller';
 import { ProjectStageService } from './project-stage/project-stage.service';
+import { GptIntegrationService } from './gpt-integration/gpt-integration.service';
+import { GptIntegrationController } from './gpt-integration/gpt-integration.controller';
 
 @Module({
   imports: [UserModule, ProjectModule],
-  controllers: [UserController, ProjectStageController],
-  providers: [PrismaService, UserService, ProjectStageService],
+  controllers: [
+    UserController,
+    ProjectStageController,
+    GptIntegrationController,
+  ],
+  providers: [
+    PrismaService,
+    UserService,
+    ProjectStageService,
+    GptIntegrationService,
+  ],
 })
 export class AppModule {}

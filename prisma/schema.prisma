@@ -42,10 +42,20 @@ model ProjectStage {
 model GptIntegration {
   gpt_session_id Int      @id @default(autoincrement())
   stage_id       Int
-  user_id        Int
-  query          String
-  response       String
+  gpt_name       String
   timestamp      DateTime  @default(now())
 
-  stage ProjectStage @relation(fields: [stage_id], references: [stage_id])
+  stage          ProjectStage @relation(fields: [stage_id], references: [stage_id])
+
+  gptMessage     GptMessage[]
+}
+
+model GptMessage {
+  message_id  Int            @id @default(autoincrement())
+  session_id  Int
+  role        String         // "system", "user", or "assistant"
+  content     String         // The message content
+  timestamp   DateTime       @default(now())
+
+  gptSession  GptIntegration @relation(fields: [session_id], references: [gpt_session_id])
 }
